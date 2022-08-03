@@ -106,6 +106,17 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
         fcsdatscaled = 0;
         return
     end
+
+    if isempty(fcshdr.CYT)
+
+        SWVER = get_mnemonic_value('SWVER',fcsheader_main, mnemonic_separator);
+        if ~isempty(SWVER)
+        
+            fcshdr.CYT = 'CytoFLEX';
+
+        end
+
+    end
     
     % Determine MachineFormat
     if contains(fcshdr.BYTEORD, '1,2,3,4')
@@ -126,7 +137,7 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = Aurora(fcsheader_main, fcshdr, mnemonic_separator);
     elseif contains(char_fcsheader, 'Canto', 'IgnoreCase', true) || contains(char_fcsheader, 'LSR', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = Canto(fcsheader_main, fcshdr, mnemonic_separator);
-    elseif contains(char_fcsheader, 'CytoFLEX', 'IgnoreCase', true)
+    elseif contains(char_fcsheader, 'CytoFLEX', 'IgnoreCase', true) || contains(fcshdr.CYT, 'CytoFLEX', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Channels] = CytoFLEX(fcsheader_main, fcshdr, mnemonic_separator);
     elseif contains(char_fcsheader, 'Image Stream', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = ImageStream(fcsheader_main, fcshdr, mnemonic_separator);    
