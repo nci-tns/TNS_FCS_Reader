@@ -189,3 +189,5 @@ else
     next_separator = next_separators(1) + mnemonic_stoppos; % the next mnemonic separator
     mneval = char(fcsheader(mnemonic_stoppos : next_separator - 2)');
 end
+
+end
