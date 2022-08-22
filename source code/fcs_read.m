@@ -170,9 +170,13 @@ else % if first line does not start with FCS2.0, FCS3.0, ...
     return;
 end
 
-if strcmp(outputArgs, 'header')
+if nargin == 2
 
-    return
+    if strcmp(outputArgs, 'header')
+
+        return
+
+    end
 
 end
 
@@ -319,4 +323,6 @@ else
     next_separators = strfind(char(fcsheader(mnemonic_stoppos:end)'), char(mnemonic_separator)); % finds all the mnemonic separators in the fcsheader after the mnemonic name
     next_separator = next_separators(1) + mnemonic_stoppos; % the next mnemonic separator
     mneval = char(fcsheader(mnemonic_stoppos : next_separator - 2)');
+end
+
 end

@@ -17,6 +17,18 @@ fcshdr.TIMESTEP  = get_mnemonic_value('$TIMESTEP', fcsheader_main, mnemonic_sepa
 fcshdr.VOL       = get_mnemonic_value('$VOL', fcsheader_main, mnemonic_separator);
 fcshdr.FIL       = get_mnemonic_value('$FIL', fcsheader_main, mnemonic_separator);
 
+if isempty(fcshdr.CYT) && ~isempty(fcshdr.OP)
+
+    fcshdr.CYT = fcshdr.OP;
+
+end
+
+if sum(contains(fcshdr.CYT, 'CytoFLEX', 'IgnoreCase', true)) == 0
+
+    fcshdr.CYT = 'CytoFLEX';
+
+end
+
 % Comp Matrix Reader
 comp = get_mnemonic_value('$SPILLOVER', fcsheader_main, mnemonic_separator);
 if ~isempty(comp)
