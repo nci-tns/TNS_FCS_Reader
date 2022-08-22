@@ -1,4 +1,4 @@
-function [fcsdat, fcshdr, fcsdatscaled, fcsdatcomp, mnemonic_separator] = fcs_read(filename)
+function [fcsdat, fcshdr, fcsdatscaled, fcsdatcomp, mnemonic_separator] = fcs_read(filename, outputArgs)
 % [fcsdat, fcshdr, fcsdatscaled, fcsdat_comp] = fca_readfcs(filename);
 %
 % Read FCS 2.0, 3.0 and 3.1 type flow cytometry data file and put the list mode
@@ -13,6 +13,7 @@ fcsdat = [];
 fcshdr = [];
 fcsdatscaled = [];
 fcsdatcomp = [];
+mnemonic_separator = [];
 
 % if noarg was supplied
 if nargin == 0 % no inputted arguments
@@ -169,6 +170,12 @@ else % if first line does not start with FCS2.0, FCS3.0, ...
     return;
 end
 
+if strcmp(outputArgs, 'header')
+
+    return
+
+end
+
 %% Reading the Events
 fseek(fid,FcsDataStartPos,'bof'); % set offset to FcsDataStartPos for reading data
 if contains(fcsheader_type,'FCS2.0')
@@ -277,6 +284,8 @@ if nargout > 2
             end
         end
     end
+end
+
 end
 
 %% calculate the compensated events
