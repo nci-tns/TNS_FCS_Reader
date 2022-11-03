@@ -112,9 +112,7 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
 
         SWVER = get_mnemonic_value('SWVER',fcsheader_main, mnemonic_separator);
         if ~isempty(SWVER)
-        
             fcshdr.CYT = 'CytoFLEX';
-
         end
 
     end
@@ -140,7 +138,7 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = Canto(fcsheader_main, fcshdr, mnemonic_separator);
     elseif contains(char_fcsheader, 'CytoFLEX', 'IgnoreCase', true) || contains(fcshdr.CYT, 'CytoFLEX', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Channels] = CytoFLEX(fcsheader_main, fcshdr, mnemonic_separator);
-    elseif contains(char_fcsheader, 'Image Stream', 'IgnoreCase', true)
+    elseif contains(char_fcsheader, 'Image Stream', 'IgnoreCase', true) || contains(fcshdr.CYT, 'CellStream', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = ImageStream(fcsheader_main, fcshdr, mnemonic_separator);    
     elseif contains(char_fcsheader, 'Fortessa', 'IgnoreCase', true) || contains(char_fcsheader, 'Symphony', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Lasers] = Fortessa(fcsheader_main, fcshdr, mnemonic_separator);
