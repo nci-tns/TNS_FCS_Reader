@@ -109,12 +109,10 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
     end
 
     if isempty(fcshdr.CYT)
-
         SWVER = get_mnemonic_value('SWVER',fcsheader_main, mnemonic_separator);
         if ~isempty(SWVER)
             fcshdr.CYT = 'CytoFLEX';
         end
-
     end
     
     % Determine MachineFormat
@@ -152,14 +150,15 @@ elseif contains(fcsheader_type,'FCS2.0') || contains(fcsheader_type,'FCS3.0')  |
         [fcshdr, fcshdr.Parameters, fcshdr.Misc, fcshdr.Channels] = NanoFCM(fcsheader_main, fcshdr, mnemonic_separator);
     elseif contains(char_fcsheader, 'Quanteon', 'IgnoreCase', true)
         [fcshdr, fcshdr.Parameters, fcshdr.Misc] = Quanteon(fcsheader_main, fcshdr, mnemonic_separator);
+    elseif contains(char_fcsheader,'ID7000','IgnoreCase',true)
+        [fcshdr, fcshdr.Parameters, fcshdr.Misc] = SonyID7000(fcsheader_main, fcshdr, mnemonic_separator);
     else
-%         msgbox('Cannot determine cytometer from FCS file or cytometer is unsupported.', 'Error', 'warn');
     end
+
     if isempty(fcshdr.CYT)
         fcshdr.CYT = 'Unknown';
     end
     fcshdr.Misc.MnemonicSep = double_mnem_sep;
-    %fcshdr.Misc.Char_fcsheader = char_fcsheader;
     
 else % if first line does not start with FCS2.0, FCS3.0, ...
     msgbox([FileName,': The file can not be read (Unsupported FCS type)'],'FCS reading info','warn');
@@ -169,13 +168,9 @@ else % if first line does not start with FCS2.0, FCS3.0, ...
 end
 
 if nargin == 2
-
     if strcmp(outputArgs, 'header')
-
         return
-
     end
-
 end
 
 %% Reading the Events
@@ -199,9 +194,9 @@ if contains(fcsheader_type,'FCS2.0')
             end
         elseif str2double(fcshdr.Parameters(1).Bit) == 32
             if fcshdr.DATATYPE ~= 'F'
-                fcsdat = (fread(fid,[fcshdr.PAR fcshdr.TOT],'uint32')');
+                fcsdat = (fread(fid,[fcshdr.PAR fcshdr.TOT],'uint32',machineformat)');
             else % 'LYSYS' case
-                fcsdat = (fread(fid,[fcshdr.PAR fcshdr.TOT],'float32')');
+                fcsdat = (fread(fid,[fcshdr.PAR fcshdr.TOT],'float32',machineformat)');
             end
         else
             bittype = ['ubit',fcshdr.Parameters(1).Bit];

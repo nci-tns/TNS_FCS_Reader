@@ -45,10 +45,10 @@ for i=1:NumOfPar
     Par(i).ChannelType = get_mnemonic_value(['P',num2str(i),'CHANNELTYPE'], fcsheader_main, mnemonic_separator);
     Par(i).Gain        = get_mnemonic_value(['$P',num2str(i),'G'], fcsheader_main, mnemonic_separator);    
     Par(i).Amp         = get_mnemonic_value(['$P',num2str(i),'E'], fcsheader_main, mnemonic_separator);
-    
-    % LIN/LOG
-    % In FCS 3.1, all floating data is treated as LIN rather than LOG for $PiE--
+    floating data is treated as LIN rather than LOG for $PiE--
     % all $PiE are stored as 0.0, 0.0--nothing indicates LOG or LIN
+    % LIN/LOG
+    % In FCS 3.1, all 
     logdisplay = get_mnemonic_value(['$P',num2str(i),'E'], fcsheader_main, mnemonic_separator);
     par_exponent= str2num(logdisplay); % converts string to matrix to store decade and log values
     Par(i).Decade = par_exponent(1);
